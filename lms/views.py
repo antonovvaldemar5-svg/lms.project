@@ -1,24 +1,47 @@
 from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from users.models import Payment
+from .permissions import IsOwnerOrModerator, IsModerator
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [IsAuthenticated]
+        elif self.action == 'destroy':
+            self.permission_classes = [IsAuthenticated, IsModerator]
+        return super().get_permissions()
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class LessonListCreateView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            self.permission_classes = [IsAuthenticated, IsModerator]
+        return super().get_permissions()
 
 
 class PaymentListView(generics.ListAPIView):
@@ -27,3 +50,4 @@ class PaymentListView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['paid_course', 'paid_lesson', 'payment_method']
     ordering_fields = ['payment_date']
+    permission_classes = [IsAuthenticated]
