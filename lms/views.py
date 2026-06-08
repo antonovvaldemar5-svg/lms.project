@@ -6,12 +6,14 @@ from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from users.models import Payment
 from .permissions import IsOwnerOrModerator, IsModerator
+from .paginators import CoursePaginator, LessonPaginator
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+    pagination_class = CoursePaginator
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -34,6 +36,7 @@ class LessonListCreateView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = LessonPaginator
 
     def get_queryset(self):
         qs = super().get_queryset()
