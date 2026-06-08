@@ -51,3 +51,11 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'{self.user.email} - {self.amount}'
+
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscriptions')
+    course = models.ForeignKey('lms.Course', on_delete=models.CASCADE, related_name='subscriptions')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'course')
