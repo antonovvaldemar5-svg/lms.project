@@ -1,12 +1,15 @@
 from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from users.models import Payment
 from .permissions import IsOwnerOrModerator, IsModerator
 from .paginators import CoursePaginator, LessonPaginator
+from .services.stripe_services import create_payment_session
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -66,3 +69,23 @@ class PaymentListView(generics.ListAPIView):
     filterset_fields = ['paid_course', 'paid_lesson', 'payment_method']
     ordering_fields = ['payment_date']
     permission_classes = [IsAuthenticated]
+
+
+class CreatePaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        course_id = request.data.get('course_id')
+        if not course_id:
+            return Response({'error': 'course_id required'}, status=400)
+
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            return Response({'error': 'Course not found'}, status=404)
+
+        success_url = request.data.get('success_url', 'http://localhost:8000/success/')
+        cancel_url = request.data.get('cancel_url', 'http://localhost:8000/cancel/')
+
+        payment_url = create_payment_session(course, request.user, success_url, cancel_url)
+        return Response({'payment_url': payment_url})
