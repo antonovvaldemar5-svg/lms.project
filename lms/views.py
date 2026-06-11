@@ -10,6 +10,7 @@ from users.models import Payment
 from .permissions import IsOwnerOrModerator, IsModerator
 from .paginators import CoursePaginator, LessonPaginator
 from .services.stripe_services import create_payment_session
+from .tasks import send_course_update_notification   # <-- импорт задачи
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -33,6 +34,10 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        send_course_update_notification.delay(instance.id)   # <-- вызов задачи
 
 
 class LessonListCreateView(generics.ListCreateAPIView):
