@@ -10,7 +10,7 @@ from users.models import Payment
 from .permissions import IsOwnerOrModerator, IsModerator
 from .paginators import CoursePaginator, LessonPaginator
 from .services.stripe_services import create_payment_session
-from .tasks import send_course_update_notification   # <-- импорт задачи
+from .tasks import send_course_update_notification
 
 
 class CourseViewSet(viewsets.ModelViewSet):
