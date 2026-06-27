@@ -1,11 +1,7 @@
-             version: '3.8'
-
 services:
   db:
     image: postgres:15
     container_name: lms_db
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -18,7 +14,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 3
 
   redis:
     image: redis:7
@@ -31,7 +27,7 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 3
 
   web:
     build: .
