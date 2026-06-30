@@ -89,8 +89,11 @@ class CreatePaymentView(APIView):
         except Course.DoesNotExist:
             return Response({'error': 'Course not found'}, status=404)
 
-        success_url = request.data.get('success_url', 'http://localhost:8000/success/')
-        cancel_url = request.data.get('cancel_url', 'http://localhost:8000/cancel/')
+        success_url = request.data.get(
+            'success_url', 'http://localhost:8000/success/')
+        cancel_url = request.data.get(
+            'cancel_url', 'http://localhost:8000/cancel/')
 
-        payment_url = create_payment_session(course, request.user, success_url, cancel_url)
+        payment_url = create_payment_session(
+            course, request.user, success_url, cancel_url)
         return Response({'payment_url': payment_url})

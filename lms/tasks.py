@@ -4,6 +4,7 @@ from django.conf import settings
 from .models import Course
 from users.models import Subscription
 
+
 @shared_task
 def send_course_update_notification(course_id):
     try:

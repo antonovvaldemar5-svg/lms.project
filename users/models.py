@@ -49,14 +49,29 @@ class Payment(models.Model):
         ('failed', 'Ошибка'),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='payments')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='payments')
     payment_date = models.DateTimeField(auto_now_add=True)
-    paid_course = models.ForeignKey('lms.Course', on_delete=models.CASCADE, null=True, blank=True)
-    paid_lesson = models.ForeignKey('lms.Lesson', on_delete=models.CASCADE, null=True, blank=True)
+    paid_course = models.ForeignKey(
+        'lms.Course',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True)
+    paid_lesson = models.ForeignKey(
+        'lms.Lesson',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS, default='card')
+    payment_method = models.CharField(
+        max_length=20,
+        choices=PAYMENT_METHODS,
+        default='card')
     stripe_session_id = models.CharField(max_length=255, blank=True, null=True)
-    stripe_payment_status = models.CharField(max_length=50, choices=PAYMENT_STATUS, default='pending')
+    stripe_payment_status = models.CharField(
+        max_length=50, choices=PAYMENT_STATUS, default='pending')
 
     class Meta:
         unique_together = ('user', 'paid_course', 'stripe_session_id')
@@ -66,8 +81,14 @@ class Payment(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscriptions')
-    course = models.ForeignKey('lms.Course', on_delete=models.CASCADE, related_name='subscriptions')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='subscriptions')
+    course = models.ForeignKey(
+        'lms.Course',
+        on_delete=models.CASCADE,
+        related_name='subscriptions')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

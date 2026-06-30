@@ -15,21 +15,28 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Course',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=200)),
-                ('preview', models.ImageField(blank=True, null=True, upload_to='courses/')),
+                ('preview', models.ImageField(
+                    blank=True, null=True, upload_to='courses/')),
                 ('description', models.TextField()),
             ],
         ),
         migrations.CreateModel(
             name='Lesson',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=200)),
                 ('description', models.TextField()),
-                ('preview', models.ImageField(blank=True, null=True, upload_to='lessons/')),
+                ('preview', models.ImageField(
+                    blank=True, null=True, upload_to='lessons/')),
                 ('video_link', models.URLField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='lessons', to='lms.course')),
+                ('course',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='lessons',
+                                   to='lms.course')),
             ],
         ),
     ]
