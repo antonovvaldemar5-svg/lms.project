@@ -6,9 +6,11 @@ from users.models import Subscription
 
 User = get_user_model()
 
+
 class LessonCRUDTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='test@example.com', password='123')
+        self.user = User.objects.create_user(
+            email='test@example.com', password='123')
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.course = Course.objects.create(title='Course', owner=self.user)
@@ -38,7 +40,8 @@ class LessonCRUDTestCase(TestCase):
             course=self.course,
             owner=self.user
         )
-        response = self.client.patch(f'/api/lessons/{lesson.id}/', {'title': 'Updated'})
+        response = self.client.patch(
+            f'/api/lessons/{lesson.id}/', {'title': 'Updated'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['title'], 'Updated')
 
@@ -51,25 +54,35 @@ class LessonCRUDTestCase(TestCase):
             owner=self.user
         )
         response = self.client.delete(f'/api/lessons/{lesson.id}/')
-        self.assertEqual(response.status_code, 403)  # только модератор может удалять
+        # только модератор может удалять
+        self.assertEqual(response.status_code, 403)
 
 
 class SubscriptionTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='test@example.com', password='123')
+        self.user = User.objects.create_user(
+            email='test@example.com', password='123')
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.course = Course.objects.create(title='Course', owner=self.user)
 
     def test_add_subscription(self):
-        response = self.client.post('/api/subscribe/', {'course_id': self.course.id})
+        response = self.client.post(
+            '/api/subscribe/', {'course_id': self.course.id})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['message'], 'Подписка добавлена')
-        self.assertTrue(Subscription.objects.filter(user=self.user, course=self.course).exists())
+        self.assertTrue(
+            Subscription.objects.filter(
+                user=self.user,
+                course=self.course).exists())
 
     def test_remove_subscription(self):
         Subscription.objects.create(user=self.user, course=self.course)
-        response = self.client.post('/api/subscribe/', {'course_id': self.course.id})
+        response = self.client.post(
+            '/api/subscribe/', {'course_id': self.course.id})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['message'], 'Подписка удалена')
-        self.assertFalse(Subscription.objects.filter(user=self.user, course=self.course).exists())
+        self.assertFalse(
+            Subscription.objects.filter(
+                user=self.user,
+                course=self.course).exists())

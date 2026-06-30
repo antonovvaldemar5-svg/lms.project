@@ -1,0 +1,4 @@
+[flake8]
+ignore = E501, W503, E203
+exclude = venv,.env,.git,__pycache__,migrations,.idea,.vscode,celerybeat-schedule,*.pyc,*.pyo,*.pyd,coverage.txt,.coverage,config/__pycache__,lms/__pycache__,users/__pycache__,lms/services/__pycache__,users/migrations/,lms/migrations/
+max-line-length = 120

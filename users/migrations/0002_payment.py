@@ -16,13 +16,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Payment',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('payment_date', models.DateTimeField(auto_now_add=True)),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('payment_method', models.CharField(choices=[('cash', 'Наличные'), ('transfer', 'Перевод на счёт')], max_length=20)),
-                ('paid_course', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='lms.course')),
-                ('paid_lesson', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='lms.lesson')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments', to=settings.AUTH_USER_MODEL)),
+                ('payment_method', models.CharField(choices=[
+                 ('cash', 'Наличные'), ('transfer', 'Перевод на счёт')], max_length=20)),
+                ('paid_course', models.ForeignKey(blank=True, null=True,
+                 on_delete=django.db.models.deletion.CASCADE, to='lms.course')),
+                ('paid_lesson', models.ForeignKey(blank=True, null=True,
+                 on_delete=django.db.models.deletion.CASCADE, to='lms.lesson')),
+                ('user',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='payments',
+                                   to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

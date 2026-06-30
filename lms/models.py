@@ -23,7 +23,10 @@ class Lesson(models.Model):
     description = models.TextField()
     preview = models.ImageField(upload_to='lessons/', blank=True, null=True)
     video_link = models.URLField()
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='lessons')
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

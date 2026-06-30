@@ -14,7 +14,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='payment',
             name='stripe_payment_status',
-            field=models.CharField(choices=[('pending', 'Ожидает оплаты'), ('paid', 'Оплачено'), ('failed', 'Ошибка')], default='pending', max_length=50),
+            field=models.CharField(
+                choices=[
+                    ('pending',
+                     'Ожидает оплаты'),
+                    ('paid',
+                     'Оплачено'),
+                    ('failed',
+                     'Ошибка')],
+                default='pending',
+                max_length=50),
         ),
         migrations.AddField(
             model_name='payment',
@@ -24,7 +33,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='payment',
             name='payment_method',
-            field=models.CharField(choices=[('cash', 'Наличные'), ('transfer', 'Перевод на счёт'), ('card', 'Банковская карта')], default='card', max_length=20),
+            field=models.CharField(
+                choices=[
+                    ('cash',
+                     'Наличные'),
+                    ('transfer',
+                     'Перевод на счёт'),
+                    ('card',
+                     'Банковская карта')],
+                default='card',
+                max_length=20),
         ),
         migrations.AlterUniqueTogether(
             name='payment',

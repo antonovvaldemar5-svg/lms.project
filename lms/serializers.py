@@ -9,7 +9,14 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'description', 'preview', 'video_link', 'course', 'owner']
+        fields = [
+            'id',
+            'title',
+            'description',
+            'preview',
+            'video_link',
+            'course',
+            'owner']
         read_only_fields = ['owner']
 
 
@@ -20,7 +27,15 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'description', 'preview', 'lessons_count', 'lessons', 'owner', 'is_subscribed']
+        fields = [
+            'id',
+            'title',
+            'description',
+            'preview',
+            'lessons_count',
+            'lessons',
+            'owner',
+            'is_subscribed']
         read_only_fields = ['owner']
 
     def get_lessons_count(self, obj):
@@ -37,4 +52,3 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = '__all__'
-
