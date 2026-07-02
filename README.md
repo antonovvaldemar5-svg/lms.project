@@ -1,10 +1,10 @@
-# LMS - Система управления курсами
+# LMS Project
 
-API для управления курсами, уроками, платежами и подписками.
+Система управления курсами, уроками, платежами и подписками.
 
-## Запуск через Docker Compose
+## Локальный запуск (Docker Compose)
 
-### 1. Клонируйте репозиторий
-```bash
-git clone <repo-url>
-cd <project-folder>
+1. Склонируйте репозиторий:
+   ```bash
+   git clone https://github.com/antonovvaldemar5-svg/lms.project.git
+   cd lms.project

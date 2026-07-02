@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, feature/cicd ]
+    branches: [ develop ]
   pull_request:
-    branches: [ main, feature/cicd ]
+    branches: [ develop ]
 
 jobs:
   test:
@@ -69,11 +69,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Deploy to server
+      - name: Deploy to server via Docker
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -81,9 +81,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/vladimir/project
-            git pull origin main
-            source venv/bin/activate
-            pip install -r requirements.txt
-            python manage.py migrate
-            sudo systemctl restart lms
-            sudo systemctl restart nginx
+            docker-compose down
+            git pull origin develop
+            docker-compose build
+            docker-compose up -d
+            docker system prune -f
